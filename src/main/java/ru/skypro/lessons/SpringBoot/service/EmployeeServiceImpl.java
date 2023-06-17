@@ -2,6 +2,7 @@ package ru.skypro.lessons.SpringBoot.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.skypro.lessons.SpringBoot.exceptions.IdNotFoundException;
 import ru.skypro.lessons.SpringBoot.model.Employee;
 import ru.skypro.lessons.SpringBoot.repository.EmployeeRepositoryImpl;
 
@@ -53,5 +54,42 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .filter(employee -> employee.getSalary() > averageSalary)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public Employee findEmployeeById(int id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(id));
+    }
+
+    @Override
+    public void create(List<Employee> employeeList) {
+         employeeList.stream()
+         .map(employee -> new Employee(employee.getName(), employee.getSalary()))
+         .map(employeeRepository::addEmployee)
+         .collect(Collectors.toList());
+    }
+
+    @Override
+    public void putEmployeeById (int id, Employee employee) {
+        Employee oldEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(id));
+        oldEmployee.setSalary(employee.getSalary());
+        oldEmployee.setName(employee.getName());
+        employeeRepository.putEmployee(id, oldEmployee);
+    }
+
+    @Override
+    public void deleteEmployeeById(int id) {
+        employeeRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(id));
+        employeeRepository.deleteEmployee(id);
+    }
+
+    @Override
+    public List<Employee> findEmployeeWithSalaryHigherThan(int salary) {
+        return employeeRepository.getAllEmployees().stream()
+                .filter(employee -> employee.getSalary() > salary)
+                .collect(Collectors.toList());
     }
 }
