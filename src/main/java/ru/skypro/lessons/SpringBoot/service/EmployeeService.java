@@ -13,4 +13,14 @@ public interface EmployeeService {
     Employee findEmployeeWithMinSalary();
 
     public List <Employee> highSalary();
+
+    Employee findEmployeeById(int id);
+
+    void create(List<Employee> employeeList);
+
+    void putEmployeeById(int id, Employee employee);
+
+    void deleteEmployeeById(int id);
+
+    List<Employee> findEmployeeWithSalaryHigherThan(int salary);
 }
