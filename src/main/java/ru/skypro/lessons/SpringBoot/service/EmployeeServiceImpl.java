@@ -1,20 +1,30 @@
 package ru.skypro.lessons.SpringBoot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.skypro.lessons.SpringBoot.dto.EmployeeDTO;
 import ru.skypro.lessons.SpringBoot.exceptions.IdNotFoundException;
 import ru.skypro.lessons.SpringBoot.model.Employee;
-import ru.skypro.lessons.SpringBoot.repository.EmployeeRepositoryImpl;
+import ru.skypro.lessons.SpringBoot.model.Position;
+import ru.skypro.lessons.SpringBoot.repository.EmployeeRepository;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepositoryImpl employeeRepository;
+    private final EmployeeRepository employeeRepository;
+    private final EmployeeDTO employeeDTO;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeDTO employeeDTO) {
+        this.employeeRepository = employeeRepository;
+        this.employeeDTO = employeeDTO;
+    }
 
     @Override
     public int findSalarySum() {
@@ -90,6 +100,51 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> findEmployeeWithSalaryHigherThan(int salary) {
         return employeeRepository.getAllEmployees().stream()
                 .filter(employee -> employee.getSalary() > salary)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EmployeeDTO> withHighestSalary() {
+        return employeeRepository.employeeMaxSalary();
+    }
+
+    @Override
+    public List<EmployeeDTO> getEmployeePosition(String position) {
+        return null;
+    }
+
+    @Override
+    public EmployeeDTO getEmployeeFullInfo(int id) {
+        return null;
+    }
+
+    @Override
+    public List<EmployeeDTO> getEmployeesFromPage(int page) {
+        return null;
+    }
+
+    @Override
+    public List<EmployeeDTO> findEmployeeByPosition(String position) {
+        return Optional.ofNullable(position)
+                .map(employeeRepository::findEmployeeByPosition_Position)
+                .orElseGet(employeeRepository::findAll)
+                .stream()
+                .map(employeeDTO::fromEmployee)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public EmployeeDTO findEmployeeFullInfo(int id) {
+        return employeeRepository.findById(id)
+                .map(employeeDTO::fromEmployee)
+                .orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public List<EmployeeDTO> findEmployeesFromPage(int page) {
+        return employeeRepository.findAll(PageRequest.of(page, 10))
+                .stream()
+                .map(employeeDTO::fromEmployee)
                 .collect(Collectors.toList());
     }
 }
