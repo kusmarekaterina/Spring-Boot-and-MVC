@@ -1,12 +1,13 @@
 package ru.skypro.lessons.SpringBoot.service;
 
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.skypro.lessons.SpringBoot.dto.EmployeeDTO;
 import ru.skypro.lessons.SpringBoot.exceptions.IdNotFoundException;
 import ru.skypro.lessons.SpringBoot.model.Employee;
-import ru.skypro.lessons.SpringBoot.model.Position;
 import ru.skypro.lessons.SpringBoot.repository.EmployeeRepository;
 
 import java.util.Comparator;
@@ -104,23 +105,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> withHighestSalary() {
+    public List<EmployeeDTO> findEmployeesWithHighestSalary() {
         return employeeRepository.employeeMaxSalary();
-    }
-
-    @Override
-    public List<EmployeeDTO> getEmployeePosition(String position) {
-        return null;
-    }
-
-    @Override
-    public EmployeeDTO getEmployeeFullInfo(int id) {
-        return null;
-    }
-
-    @Override
-    public List<EmployeeDTO> getEmployeesFromPage(int page) {
-        return null;
     }
 
     @Override
@@ -141,10 +127,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> findEmployeesFromPage(int page) {
-        return employeeRepository.findAll(PageRequest.of(page, 10))
-                .stream()
-                .map(employeeDTO::fromEmployee)
-                .collect(Collectors.toList());
+    public List<Employee> findEmployeesFromPage (int pageIndex, int unitPerPage) {
+        Pageable employeeOfConcretePage = PageRequest.of(pageIndex, unitPerPage);
+        Page<Employee> page = employeeRepository.findAll(employeeOfConcretePage);
+        return page.stream().toList();
     }
 }

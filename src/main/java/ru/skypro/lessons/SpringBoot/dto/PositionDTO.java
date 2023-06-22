@@ -1,8 +1,7 @@
 package ru.skypro.lessons.SpringBoot.dto;
 
-import lombok.Data;
+
 import org.springframework.stereotype.Component;
-import ru.skypro.lessons.SpringBoot.model.Employee;
 import ru.skypro.lessons.SpringBoot.model.Position;
 
 @Component

@@ -1,8 +1,7 @@
 package ru.skypro.lessons.SpringBoot.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 import java.util.List;
 

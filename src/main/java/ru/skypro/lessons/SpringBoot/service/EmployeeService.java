@@ -25,17 +25,12 @@ public interface EmployeeService {
 
     List<Employee> findEmployeeWithSalaryHigherThan(int salary);
 
-    List<EmployeeDTO> withHighestSalary();
-
-    List<EmployeeDTO> getEmployeePosition(String position);
-
-    EmployeeDTO getEmployeeFullInfo(int id);
-
-    List<EmployeeDTO> getEmployeesFromPage(int page);
+    List<EmployeeDTO>findEmployeesWithHighestSalary();
 
     List<EmployeeDTO> findEmployeeByPosition(String position);
 
     EmployeeDTO findEmployeeFullInfo(int id);
 
-    List<EmployeeDTO> findEmployeesFromPage(int page);
+    List<Employee> findEmployeesFromPage(int pageIndex, int unitPerPage);
+
 }

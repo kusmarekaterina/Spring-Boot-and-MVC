@@ -1,7 +1,5 @@
 package ru.skypro.lessons.SpringBoot.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.lessons.SpringBoot.dto.EmployeeDTO;
 import ru.skypro.lessons.SpringBoot.model.Employee;
@@ -65,8 +63,9 @@ public class EmployeeController {
     }
 
     @GetMapping ("/withHighestSalary")
-    public List<EmployeeDTO> withHighestSalary() {
-        return employeeService.withHighestSalary();
+    public List<EmployeeDTO> findEmployeesWithHighestSalary() {
+
+        return employeeService.findEmployeesWithHighestSalary();
     }
 
     @GetMapping("/employees")
@@ -80,8 +79,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/page")
-    public List<EmployeeDTO> findEmployeesFromPage(@RequestParam(required = false, defaultValue = "0") int page) {
-        return employeeService.findEmployeesFromPage(page);
+    public List<Employee> findEmployeesFromPage(@RequestParam int pageIndex, int unitPerPage) {
+        return employeeService.findEmployeesFromPage(pageIndex, unitPerPage);
     }
 
 }
