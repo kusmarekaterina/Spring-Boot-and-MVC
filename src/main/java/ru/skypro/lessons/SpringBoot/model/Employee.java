@@ -1,23 +1,27 @@
 package ru.skypro.lessons.SpringBoot.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "employee")
 public class Employee {
-
-    private static int count = 1;
 
     private String name;
 
     private int salary;
-
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "position_id")
+    private Position position;
 
     public Employee(String name, int salary) {
         this.name = name;
         this.salary = salary;
-        this.id = count++;
+    }
+
+    public Employee() {
     }
 
     public String getName() {
@@ -42,5 +46,13 @@ public class Employee {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

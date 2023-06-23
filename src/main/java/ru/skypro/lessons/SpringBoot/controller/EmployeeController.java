@@ -1,8 +1,7 @@
 package ru.skypro.lessons.SpringBoot.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.lessons.SpringBoot.dto.EmployeeDTO;
 import ru.skypro.lessons.SpringBoot.model.Employee;
 import ru.skypro.lessons.SpringBoot.service.EmployeeService;
 
@@ -10,10 +9,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
-@RequiredArgsConstructor
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     @GetMapping ("/salary/sum")
     public int findSalarySum () {
@@ -59,4 +61,26 @@ public class EmployeeController {
     public List<Employee> findEmployeeWithSalaryHigherThan(@RequestParam int salary){
         return employeeService.findEmployeeWithSalaryHigherThan(salary);
     }
+
+    @GetMapping ("/withHighestSalary")
+    public List<EmployeeDTO> findEmployeesWithHighestSalary() {
+
+        return employeeService.findEmployeesWithHighestSalary();
+    }
+
+    @GetMapping("/employees")
+    public List<EmployeeDTO> findEmployeesByPosition (@PathVariable String position){
+        return employeeService.findEmployeeByPosition(position);
+    }
+
+    @GetMapping("/{id}/fullInfo")
+    public EmployeeDTO findEmployeeFullInfo(@PathVariable int id) {
+        return employeeService.findEmployeeFullInfo(id);
+    }
+
+    @GetMapping("/page")
+    public List<Employee> findEmployeesFromPage(@RequestParam int pageIndex, int unitPerPage) {
+        return employeeService.findEmployeesFromPage(pageIndex, unitPerPage);
+    }
+
 }
